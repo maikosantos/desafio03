@@ -71,17 +71,12 @@ class Main extends Component {
   handleSave = () => {
     this.setState({ open: false, newUserInput: this.state.newUserInput });
 
+    if (!this.state.newUserInput) return;
     //const [latitude, longitude] = e.lngLat;
     console.log(this.state.newUserInput);
     console.log(
       `Latitude: ${this.state.latitude} \nLongitude: ${this.state.longitude}`
     );
-  };
-
-  handleChange = newUserInput => event => {
-    this.setState({
-      [newUserInput]: event.target.value
-    });
   };
 
   render() {
@@ -111,7 +106,7 @@ class Main extends Component {
               placeholder="Ex: maikosantos"
               margin="normal"
               value={this.state.newUserInput}
-              onChange={this.handleChange("newUserInput")}
+              onChange={e => this.setState({ newUserInput: e.target.value })}
             />
           </DialogContent>
           <DialogActions>
