@@ -12,13 +12,13 @@ export function* addUser(action) {
     );
 
     if (isDuplicated) {
-      yield put(UserActions.addUserFailure("Repositório duplicado!"));
+      yield put(UserActions.addUserFailure("Usuário duplicado!"));
     } else {
       const repositoryData = {
         id: data.id,
-        name: data.full_name,
-        description: data.description,
-        url: data.html_url
+        name: data.name,
+        login: data.login,
+        avatar: data.avatar_url
       };
 
       yield put(UserActions.addUserSuccess(repositoryData));

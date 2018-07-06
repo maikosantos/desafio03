@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as UsersActions } from "../../store/ducks/users";
 
+import SideBar from "../../components/SideBar";
+
 class Main extends Component {
   state = {
     open: false,
@@ -72,12 +74,20 @@ class Main extends Component {
     this.setState({ open: false, newUserInput: this.state.newUserInput });
 
     if (!this.state.newUserInput) return;
-    //const [latitude, longitude] = e.lngLat;
     console.log(this.state.newUserInput);
     console.log(
       `Latitude: ${this.state.latitude} \nLongitude: ${this.state.longitude}`
     );
+
+    this.props.addUserRequest(this.state.newUserInput);
+    this.setState({ newUserInput: "" });
   };
+
+  //handleAddRepository = event => {
+  //event.preventDefault();
+  //this.props.addFavoriteRequest(this.state.repositoryInput);
+  //this.setState({ repositoryInput: "" });
+  //};
 
   render() {
     return (
@@ -123,7 +133,6 @@ class Main extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-
         <Marker
           latitude={-29.688}
           longitude={-51.1333}
@@ -139,6 +148,7 @@ class Main extends Component {
             src="https://avatars0.githubusercontent.com/u/3418695?v=4"
           />
         </Marker>
+        <SideBar />
       </MapGL>
     );
   }
