@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import MapGL, { Marker } from "react-map-gl";
 
 import Button from "@material-ui/core/Button";
@@ -52,7 +52,7 @@ class Main extends Component {
 
   //const [latitude, longitude];
   handleMapClick = e => {
-    const [latitude, longitude] = e.lngLat;
+    const [longitude, latitude] = e.lngLat;
 
     this.setState({
       open: true,
@@ -71,7 +71,12 @@ class Main extends Component {
   };
 
   handleSave = () => {
-    this.setState({ open: false, newUserInput: this.state.newUserInput });
+    this.setState({
+      open: false,
+      newUserInput: this.state.newUserInput,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude
+    });
 
     if (!this.state.newUserInput) return;
     console.log(this.state.newUserInput);
@@ -79,15 +84,22 @@ class Main extends Component {
       `Latitude: ${this.state.latitude} \nLongitude: ${this.state.longitude}`
     );
 
-    this.props.addUserRequest(this.state.newUserInput);
-    this.setState({ newUserInput: "" });
+    this.props.addUserRequest(
+      this.state.newUserInput,
+      this.state.latitude,
+      this.state.longitude
+    );
+    this.setState({
+      newUserInput: ""
+    });
   };
 
-  //handleAddRepository = event => {
-  //event.preventDefault();
-  //this.props.addFavoriteRequest(this.state.repositoryInput);
-  //this.setState({ repositoryInput: "" });
-  //};
+  _onKeyPress = event => {
+    if (event.charCode === 13) {
+      event.preventDefault();
+      this.handleSave();
+    }
+  };
 
   render() {
     return (
@@ -117,6 +129,8 @@ class Main extends Component {
               margin="normal"
               value={this.state.newUserInput}
               onChange={e => this.setState({ newUserInput: e.target.value })}
+              onKeyPress={this._onKeyPress}
+              autoFocus
             />
           </DialogContent>
           <DialogActions>
@@ -127,35 +141,40 @@ class Main extends Component {
               variant="outlined"
               onClick={this.handleSave}
               color="primary"
-              autoFocus
             >
               Salvar
             </Button>
           </DialogActions>
         </Dialog>
-        <Marker
-          latitude={-29.688}
-          longitude={-51.1333}
-          onClick={this.handleMapClick}
-          captureClick={true}
-        >
-          <img
-            style={{
-              borderRadius: 100,
-              width: 48,
-              height: 48
-            }}
-            src="https://avatars0.githubusercontent.com/u/3418695?v=4"
-          />
-        </Marker>
-        <SideBar />
+        {this.props.user.map(user => (
+          <Fragment key={user.id}>
+            <Marker
+              latitude={user.latitude}
+              longitude={user.longitude}
+              onClick={this.handleMapClick}
+              captureClick={true}
+            >
+              <img
+                style={{
+                  borderRadius: 100,
+                  width: 48,
+                  height: 48
+                }}
+                src={user.avatar}
+                alt="Avatar"
+              />
+            </Marker>
+          </Fragment>
+        ))}
+        {!!this.props.count && <SideBar />}
       </MapGL>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  users: state.users
+  user: state.users.data,
+  count: state.users.data.length
 });
 
 const mapDispatchToProps = dispatch =>

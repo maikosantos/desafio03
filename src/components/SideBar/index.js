@@ -16,7 +16,7 @@ import {
 const SideBar = ({ user }) => (
   <Container>
     {user.map(user => (
-      <User>
+      <User key={user.id}>
         <DivLeft>
           <DivImagem>
             <img src={user.avatar} alt="Avatar" />
@@ -32,7 +32,7 @@ const SideBar = ({ user }) => (
             className="fa fa-times-circle"
             aria-hidden="true"
           />
-          <i className="fa fa-angle-right" />
+          <i style={{ color: "#999999" }} className="fa fa-angle-right" />
         </DivRight>
       </User>
     ))}

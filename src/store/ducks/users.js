@@ -45,9 +45,9 @@ export default function users(state = INITIAL_STATE, action) {
  */
 
 export const Creators = {
-  addUserRequest: repository => ({
+  addUserRequest: (repository, latitude, longitude) => ({
     type: Types.ADD_REQUEST,
-    payload: { repository }
+    payload: { repository, latitude, longitude }
   }),
 
   addUserSuccess: data => ({
