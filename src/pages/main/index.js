@@ -25,9 +25,9 @@ class Main extends Component {
     viewport: {
       width: window.innerWidth,
       height: window.innerHeight,
-      latitude: -29.688,
-      longitude: -51.1333,
-      zoom: 10
+      latitude: "",
+      longitude: "",
+      zoom: ""
     }
   };
 
@@ -45,7 +45,10 @@ class Main extends Component {
       viewport: {
         ...this.state.viewport,
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
+        latitude: -29.688,
+        longitude: -51.1333,
+        zoom: 10
       }
     });
   };
