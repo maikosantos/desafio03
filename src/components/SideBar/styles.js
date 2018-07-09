@@ -21,8 +21,9 @@ export const User = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-bottom: 15px;
   margin-bottom: 15px;
-  border-bottom: 3px solid color=#000;
+  border-bottom: 1px solid #eee;
 `;
 
 export const DivLeft = styled.div`
