@@ -18,10 +18,23 @@ export const Container = styled.div`
 `;
 
 export const User = styled.div`
-  width: 280px;
-  height: 59px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border-bottom: 3px solid color=#000;
+`;
+
+export const DivLeft = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const DivRight = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
 `;
 
 export const DivImagem = styled.div`
@@ -30,8 +43,9 @@ export const DivImagem = styled.div`
   align-items: center;
 
   img {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
   }
 `;
 
@@ -40,7 +54,7 @@ export const DivNames = styled.div`
   flex-direction: column;
   align-items: flex-start;
   align-self: center;
-  padding-left: 2px;
+  padding-left: 8px;
 
   strong {
     font-size: 16px;
