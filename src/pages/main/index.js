@@ -20,14 +20,14 @@ class Main extends Component {
   state = {
     open: false,
     newUserInput: "",
-    latitude: "",
-    longitude: "",
+    latitude: 0,
+    longitude: 0,
     viewport: {
       width: window.innerWidth,
       height: window.innerHeight,
-      latitude: "",
-      longitude: "",
-      zoom: ""
+      latitude: 0,
+      longitude: 0,
+      zoom: 0
     }
   };
 
@@ -53,7 +53,6 @@ class Main extends Component {
     });
   };
 
-  //const [latitude, longitude];
   handleMapClick = e => {
     const [longitude, latitude] = e.lngLat;
 
@@ -69,8 +68,6 @@ class Main extends Component {
 
   handleClose = () => {
     this.setState({ open: false, newUserInput: "" });
-
-    //console.log(`Latitude: ${latitude} \nLongitude: ${longitude}`);
   };
 
   handleSave = () => {

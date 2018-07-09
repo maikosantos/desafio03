@@ -2,8 +2,6 @@ import React from "react";
 
 import { connect } from "react-redux";
 
-import "font-awesome/css/font-awesome.css";
-
 import {
   Container,
   User,
@@ -12,6 +10,10 @@ import {
   DivLeft,
   DivRight
 } from "./styles";
+
+this.handleRemov = () => {
+  alert("Ok");
+};
 
 const SideBar = ({ user }) => (
   <Container>
@@ -27,11 +29,13 @@ const SideBar = ({ user }) => (
           </DivNames>
         </DivLeft>
         <DivRight>
-          <i
-            style={{ color: "#D45454", paddingRight: "20px" }}
-            className="fa fa-times-circle"
-            aria-hidden="true"
-          />
+          <a onClick={this.handleRemove}>
+            <i
+              style={{ color: "#D45454", paddingRight: "20px" }}
+              className="fa fa-times-circle"
+              aria-hidden="true"
+            />
+          </a>
           <i style={{ color: "#999999" }} className="fa fa-angle-right" />
         </DivRight>
       </User>
