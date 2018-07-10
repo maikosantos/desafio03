@@ -40,17 +40,47 @@ class Main extends Component {
     window.removeEventListener("resize", this._resize);
   }
 
+  handlePosition() {
+    const options = {
+      enableHighAccuracy: true
+    };
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const center = [pos.coords.longitude, pos.coords.latitude];
+        this.setState({
+          center: center
+        });
+      },
+      err => {
+        console.log(err);
+      },
+      options
+    );
+  }
+
   _resize = () => {
-    this.setState({
-      viewport: {
-        ...this.state.viewport,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        latitude: -29.688,
-        longitude: -51.1333,
-        zoom: 10
-      }
-    });
+    const options = {
+      enableHighAccuracy: true
+    };
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const lngLat = pos.coords;
+        this.setState({
+          viewport: {
+            ...this.state.viewport,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            latitude: lngLat.latitude,
+            longitude: lngLat.longitude,
+            zoom: 10
+          }
+        });
+      },
+      err => {
+        console.log(err);
+      },
+      options
+    );
   };
 
   handleMapClick = e => {
