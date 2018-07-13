@@ -5,7 +5,14 @@ import { Creators as UserActions } from "../ducks/users";
 
 export function* addUser(action) {
   try {
-    const { data } = yield call(api.get, `/users/${action.payload.repository}`);
+    //const { data } = yield call(api.get, `/users/${action.payload.repository}`);
+
+    const { data } = yield call(
+      api
+        .get(`/users/${action.payload.repository}`)
+        .then(response => this.getSuccessful(response))
+        .catch(error => this.getFailed(error))
+    );
 
     const isDuplicated = yield select(state =>
       state.users.data.find(user => user.id === data.id)
@@ -27,5 +34,13 @@ export function* addUser(action) {
     }
   } catch (error) {
     yield put(UserActions.addUserFailure("Erro ao adicionar repositório!"));
+  }
+}
+
+export function* removeUser(action) {
+  try {
+    yield put(UserActions.removeUserRequest(action.payload.id));
+  } catch (error) {
+    //yield put(UserActions.removeUserFailure("Erro ao remover repositório!"));
   }
 }

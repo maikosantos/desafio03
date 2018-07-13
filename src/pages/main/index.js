@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from "react";
 import MapGL, { Marker } from "react-map-gl";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -20,6 +22,8 @@ class Main extends Component {
   state = {
     open: false,
     newUserInput: "",
+    idUser: "",
+    error: null,
     latitude: 0,
     longitude: 0,
     viewport: {
@@ -84,23 +88,35 @@ class Main extends Component {
   };
 
   handleMapClick = e => {
-    const [longitude, latitude] = e.lngLat;
+    if (e.target.id !== "remove") {
+      const [longitude, latitude] = e.lngLat;
 
-    this.setState({
-      open: true,
-      newUserInput: "",
-      latitude: latitude,
-      longitude: longitude
-    });
-
-    //console.log(`Latitude: ${latitude} \nLongitude: ${longitude}`);
+      this.setState({
+        open: true,
+        newUserInput: "",
+        latitude: latitude,
+        longitude: longitude
+      });
+    }
   };
 
   handleClose = () => {
     this.setState({ open: false, newUserInput: "" });
   };
 
-  handleSave = () => {
+  addUserRequest = () => {
+    return new Promise(resolve => {
+      this.props.addUserRequest(
+        this.state.newUserInput,
+        this.state.latitude,
+        this.state.longitude
+      );
+
+      resolve();
+    });
+  };
+
+  handleSave = async () => {
     this.setState({
       open: false,
       newUserInput: this.state.newUserInput,
@@ -109,19 +125,26 @@ class Main extends Component {
     });
 
     if (!this.state.newUserInput) return;
-    console.log(this.state.newUserInput);
-    console.log(
-      `Latitude: ${this.state.latitude} \nLongitude: ${this.state.longitude}`
-    );
 
-    this.props.addUserRequest(
-      this.state.newUserInput,
-      this.state.latitude,
-      this.state.longitude
-    );
+    console.log("maiko");
+
+    await this.addUserRequest();
+
+    console.log(this.props.error);
+
     this.setState({
       newUserInput: ""
     });
+
+    //!!this.props.error && toast(this.props.error);
+
+    //console.log(this.props.error);
+    //console.log(this.state.error);
+    /*if (this.props.error === null) {
+      toast("Usuário adicionado com sucesso!");
+    } else {
+      toast.warn("Erro ao adicionar usuário!");
+    }*/
   };
 
   _onKeyPress = event => {
@@ -131,80 +154,99 @@ class Main extends Component {
     }
   };
 
+  handleRemoveUser = id => {
+    //console.log(id);
+    //this.props.removeUserRequest(this.props.id);
+    //this.setState({
+    //idUser: ""
+    //});
+  };
+
   render() {
     return (
-      <MapGL
-        {...this.state.viewport}
-        onClick={this.handleMapClick}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
-        mapboxApiAccessToken={
-          "pk.eyJ1IjoiZGllZ28zZyIsImEiOiJjamh0aHc4em0wZHdvM2tyc3hqbzNvanhrIn0.3HWnXHy_RCi35opzKo8sHQ"
-        }
-        onViewportChange={viewport => this.setState({ viewport })}
-      >
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+      <div>
+        <MapGL
+          id="mapBox"
+          {...this.state.viewport}
+          onClick={this.handleMapClick}
+          animate={true}
+          mapStyle="mapbox://styles/mapbox/streets-v9"
+          mapboxApiAccessToken={
+            "pk.eyJ1IjoiZGllZ28zZyIsImEiOiJjamh0aHc4em0wZHdvM2tyc3hqbzNvanhrIn0.3HWnXHy_RCi35opzKo8sHQ"
+          }
+          onViewportChange={viewport => this.setState({ viewport })}
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Adicionar novo usuário"}
-          </DialogTitle>
-          <DialogContent>
-            <TextField
-              id="newUserInput"
-              label="Usuário no Github"
-              placeholder="Ex: maikosantos"
-              margin="normal"
-              value={this.state.newUserInput}
-              onChange={e => this.setState({ newUserInput: e.target.value })}
-              onKeyPress={this._onKeyPress}
-              autoFocus
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" onClick={this.handleClose}>
-              Cancelar
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={this.handleSave}
-              color="primary"
-            >
-              Salvar
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {this.props.user.map(user => (
-          <Fragment key={user.id}>
-            <Marker
-              latitude={user.latitude}
-              longitude={user.longitude}
-              onClick={this.handleMapClick}
-              captureClick={true}
-            >
-              <img
-                style={{
-                  borderRadius: 100,
-                  width: 48,
-                  height: 48
-                }}
-                src={user.avatar}
-                alt="Avatar"
+          {this.props.user.map(user => (
+            <Fragment key={user.id}>
+              <Marker
+                latitude={user.latitude}
+                longitude={user.longitude}
+                onClick={this.handleMapClick}
+                captureClick={true}
+              >
+                <img
+                  style={{
+                    borderRadius: 100,
+                    width: 48,
+                    height: 48,
+                    border: "5px solid #7159C1"
+                  }}
+                  src={user.avatar}
+                  alt="Avatar"
+                />
+              </Marker>
+            </Fragment>
+          ))}
+          {!!this.props.count && (
+            <SideBar removeUser={this.handleRemoveUser(this.props.user.id)} />
+          )}
+
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Adicionar novo usuário"}
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                id="newUserInput"
+                label="Usuário no Github"
+                placeholder="Ex: maikosantos"
+                margin="normal"
+                value={this.state.newUserInput}
+                onChange={e => this.setState({ newUserInput: e.target.value })}
+                onKeyPress={this._onKeyPress}
+                autoFocus
               />
-            </Marker>
-          </Fragment>
-        ))}
-        {!!this.props.count && <SideBar />}
-      </MapGL>
+            </DialogContent>
+            <DialogActions>
+              <Button variant="outlined" onClick={this.handleClose}>
+                Cancelar
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={this.handleSave}
+                color="primary"
+              >
+                Salvar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <ToastContainer />
+        </MapGL>
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
   user: state.users.data,
-  count: state.users.data.length
+  count: state.users.data.length,
+  error: state.users.error
 });
 
 const mapDispatchToProps = dispatch =>

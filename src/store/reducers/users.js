@@ -21,6 +21,8 @@ export default function users(state = INITIAL_STATE, action) {
         loading: false,
         error: action.payload.error
       };
+    case "REMOVE_USER_REQUEST":
+      return state.filter(user => user.id !== action.payload.data.id);
     default:
       return state;
   }

@@ -5,7 +5,8 @@
 export const Types = {
   ADD_REQUEST: "users/ADD_REQUEST",
   ADD_SUCCESS: "users/ADD_SUCCESS",
-  ADD_FAILURE: "users/ADD_FAILURE"
+  ADD_FAILURE: "users/ADD_FAILURE",
+  REMOVE_REQUEST: "users/REMOVE_REQUEST"
 };
 
 /**
@@ -35,6 +36,14 @@ export default function users(state = INITIAL_STATE, action) {
         loading: false,
         error: action.payload.error
       };
+    case Types.REMOVE_REQUEST:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        data: [...state.data, action.payload.data]
+      };
+
     default:
       return state;
   }
@@ -58,5 +67,10 @@ export const Creators = {
   addUserFailure: error => ({
     type: Types.ADD_FAILURE,
     payload: { error }
+  }),
+
+  removeUserRequest: id => ({
+    type: Types.REMOVE_REQUEST,
+    payload: { id }
   })
 };
