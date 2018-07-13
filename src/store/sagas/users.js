@@ -14,6 +14,22 @@ export function* addUser(action) {
         .catch(error => this.getFailed(error))
     );
 
+    /*
+
+        axios.post('/formulas/create', {
+          name: "",
+          parts: ""
+        })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        });
+
+
+    */
+
     const isDuplicated = yield select(state =>
       state.users.data.find(user => user.id === data.id)
     );
