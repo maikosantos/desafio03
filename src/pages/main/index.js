@@ -104,19 +104,7 @@ class Main extends Component {
     this.setState({ open: false, newUserInput: "" });
   };
 
-  addUserRequest = () => {
-    return new Promise(resolve => {
-      this.props.addUserRequest(
-        this.state.newUserInput,
-        this.state.latitude,
-        this.state.longitude
-      );
-
-      resolve();
-    });
-  };
-
-  handleSave = async () => {
+  handleSave = () => {
     this.setState({
       open: false,
       newUserInput: this.state.newUserInput,
@@ -127,9 +115,11 @@ class Main extends Component {
     if (!this.state.newUserInput) return;
 
     console.log("maiko");
-
-    await this.addUserRequest();
-
+    this.props.addUserRequest(
+      this.state.newUserInput,
+      this.state.latitude,
+      this.state.longitude
+    );
     console.log(this.props.error);
 
     this.setState({

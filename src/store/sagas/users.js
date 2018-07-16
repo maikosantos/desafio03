@@ -6,28 +6,6 @@ import { Creators as UserActions } from "../ducks/users";
 export function* addUser(action) {
   try {
     const { data } = yield call(api.get, `/users/${action.payload.repository}`);
-    //const { data } = yield call(getDataRepo(action));
-    console.log(data);
-    //const { data } = getDataRepo(action);
-
-    //.then(response => yield call(api.get, `/users/${action.payload.repository}`))
-    //.catch(error => yield put(UserActions.addUserFailure("Usuário duplicado!"));
-
-    /*
-
-        axios.post('/formulas/create', {
-          name: "",
-          parts: ""
-        })
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
-            console.log(error)
-        });
-
-
-    */
 
     const isDuplicated = yield select(state =>
       state.users.data.find(user => user.id === data.id)
@@ -52,9 +30,19 @@ export function* addUser(action) {
   }
 }
 
+/*
 async function getDataRepo(action) {
-  await api.get(`/users/${action.payload.repository}`);
-}
+  const data = await api
+    .get(`/users/${action.payload.repository}`)
+    .then(function() {
+      console.log("deu tudo certo"); // "Success!"
+    })
+    .catch(function(e) {
+      console.log(e); // "oh, no!"
+    });
+  console.log(data);
+  return data;
+}*/
 
 export function* removeUser(action) {
   try {
