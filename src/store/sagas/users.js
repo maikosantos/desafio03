@@ -5,14 +5,13 @@ import { Creators as UserActions } from "../ducks/users";
 
 export function* addUser(action) {
   try {
-    //const { data } = yield call(api.get, `/users/${action.payload.repository}`);
+    const { data } = yield call(api.get, `/users/${action.payload.repository}`);
+    //const { data } = yield call(getDataRepo(action));
+    console.log(data);
+    //const { data } = getDataRepo(action);
 
-    const { data } = yield call(
-      api
-        .get(`/users/${action.payload.repository}`)
-        .then(response => this.getSuccessful(response))
-        .catch(error => this.getFailed(error))
-    );
+    //.then(response => yield call(api.get, `/users/${action.payload.repository}`))
+    //.catch(error => yield put(UserActions.addUserFailure("Usuário duplicado!"));
 
     /*
 
@@ -51,6 +50,10 @@ export function* addUser(action) {
   } catch (error) {
     yield put(UserActions.addUserFailure("Erro ao adicionar repositório!"));
   }
+}
+
+async function getDataRepo(action) {
+  await api.get(`/users/${action.payload.repository}`);
 }
 
 export function* removeUser(action) {
