@@ -26,6 +26,6 @@ export function* addUser(action) {
       yield put(UserActions.addUserSuccess(repositoryData));
     }
   } catch (error) {
-    yield put(UserActions.addUserFailure("Erro ao adicionar repositório!"));
+    yield put(UserActions.addUserFailure("Erro ao adicionar usuário!"));
   }
 }

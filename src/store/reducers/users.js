@@ -14,7 +14,7 @@ export default function users(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         error: null,
-        message: action.payload.data.message
+        message: action.payload.data.message,
         data: [...state.data, action.payload.data]
       };
     case "ADD_USER_FAILURE":
@@ -22,12 +22,6 @@ export default function users(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         error: action.payload.error
-      };
-    case "REMOVE_USER":
-      return {
-        ...state,
-        data: state.data.filter(user => user.id !== action.payload.id),
-        message: "Usuário removido com sucesso!"
       };
     default:
       return state;
