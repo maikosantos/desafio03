@@ -1,6 +1,10 @@
 import React from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as UsersActions } from "../../store/ducks/users";
 
 import {
   Container,
@@ -10,10 +14,6 @@ import {
   DivLeft,
   DivRight
 } from "./styles";
-
-//this.onClickFunction = user => {
-//console.log(user);
-//};
 
 const SideBar = ({ user, removeUser }) => (
   <Container>
@@ -31,7 +31,6 @@ const SideBar = ({ user, removeUser }) => (
         <DivRight>
           <i
             id="remove"
-            //onClick={this.handleRemove(user.name)}
             onClick={() => removeUser(user.id)}
             style={{ color: "#D45454", paddingRight: "20px" }}
             className="fa fa-times-circle"
@@ -49,4 +48,10 @@ const mapStateToProps = state => ({
   user: state.users.data
 });
 
-export default connect(mapStateToProps)(SideBar);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(UsersActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideBar);

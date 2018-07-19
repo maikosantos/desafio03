@@ -35,6 +35,14 @@ class Main extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.error) {
+      toast.success(nextProps.message);
+    } else {
+      toast.error(nextProps.error);
+    }
+  }
+
   componentDidMount() {
     window.addEventListener("resize", this._resize);
     this._resize();
@@ -125,16 +133,6 @@ class Main extends Component {
     this.setState({
       newUserInput: ""
     });
-
-    //!!this.props.error && toast(this.props.error);
-
-    //console.log(this.props.error);
-    //console.log(this.state.error);
-    /*if (this.props.error === null) {
-      toast("Usuário adicionado com sucesso!");
-    } else {
-      toast.warn("Erro ao adicionar usuário!");
-    }*/
   };
 
   _onKeyPress = event => {
@@ -142,14 +140,6 @@ class Main extends Component {
       event.preventDefault();
       this.handleSave();
     }
-  };
-
-  handleRemoveUser = id => {
-    //console.log(id);
-    //this.props.removeUserRequest(this.props.id);
-    //this.setState({
-    //idUser: ""
-    //});
   };
 
   render() {
@@ -187,9 +177,7 @@ class Main extends Component {
               </Marker>
             </Fragment>
           ))}
-          {!!this.props.count && (
-            <SideBar removeUser={this.handleRemoveUser(this.props.user.id)} />
-          )}
+          {!!this.props.count && <SideBar />}
 
           <Dialog
             open={this.state.open}
@@ -226,7 +214,7 @@ class Main extends Component {
             </DialogActions>
           </Dialog>
 
-          <ToastContainer />
+          <ToastContainer autoClose={2000} />
         </MapGL>
       </div>
     );
@@ -236,6 +224,7 @@ class Main extends Component {
 const mapStateToProps = state => ({
   user: state.users.data,
   count: state.users.data.length,
+  message: state.users.message,
   error: state.users.error
 });
 

@@ -20,34 +20,12 @@ export function* addUser(action) {
         login: data.login,
         avatar: data.avatar_url,
         latitude: action.payload.latitude,
-        longitude: action.payload.longitude
+        longitude: action.payload.longitude,
+        message: "Usuário adicionado com sucesso!"
       };
-
       yield put(UserActions.addUserSuccess(repositoryData));
     }
   } catch (error) {
     yield put(UserActions.addUserFailure("Erro ao adicionar repositório!"));
-  }
-}
-
-/*
-async function getDataRepo(action) {
-  const data = await api
-    .get(`/users/${action.payload.repository}`)
-    .then(function() {
-      console.log("deu tudo certo"); // "Success!"
-    })
-    .catch(function(e) {
-      console.log(e); // "oh, no!"
-    });
-  console.log(data);
-  return data;
-}*/
-
-export function* removeUser(action) {
-  try {
-    yield put(UserActions.removeUserRequest(action.payload.id));
-  } catch (error) {
-    //yield put(UserActions.removeUserFailure("Erro ao remover repositório!"));
   }
 }

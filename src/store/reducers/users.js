@@ -1,7 +1,8 @@
 const INITIAL_STATE = {
   loading: false,
   data: [],
-  error: null
+  error: null,
+  message: ""
 };
 
 export default function users(state = INITIAL_STATE, action) {
@@ -13,6 +14,7 @@ export default function users(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.data.message
         data: [...state.data, action.payload.data]
       };
     case "ADD_USER_FAILURE":
@@ -21,8 +23,12 @@ export default function users(state = INITIAL_STATE, action) {
         loading: false,
         error: action.payload.error
       };
-    case "REMOVE_USER_REQUEST":
-      return state.filter(user => user.id !== action.payload.data.id);
+    case "REMOVE_USER":
+      return {
+        ...state,
+        data: state.data.filter(user => user.id !== action.payload.id),
+        message: "Usuário removido com sucesso!"
+      };
     default:
       return state;
   }

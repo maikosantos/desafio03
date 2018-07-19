@@ -6,7 +6,7 @@ export const Types = {
   ADD_REQUEST: "users/ADD_REQUEST",
   ADD_SUCCESS: "users/ADD_SUCCESS",
   ADD_FAILURE: "users/ADD_FAILURE",
-  REMOVE_REQUEST: "users/REMOVE_REQUEST"
+  REMOVE_USER: "users/REMOVE_USER"
 };
 
 /**
@@ -16,7 +16,8 @@ export const Types = {
 const INITIAL_STATE = {
   loading: false,
   data: [],
-  error: null
+  error: null,
+  message: ""
 };
 
 export default function users(state = INITIAL_STATE, action) {
@@ -28,6 +29,7 @@ export default function users(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         error: null,
+        message: action.payload.data.message,
         data: [...state.data, action.payload.data]
       };
     case Types.ADD_FAILURE:
@@ -36,12 +38,12 @@ export default function users(state = INITIAL_STATE, action) {
         loading: false,
         error: action.payload.error
       };
-    case Types.REMOVE_REQUEST:
+
+    case Types.REMOVE_USER:
       return {
         ...state,
-        loading: false,
-        error: null,
-        data: [...state.data, action.payload.data]
+        data: state.data.filter(user => user.id !== action.payload.id),
+        message: "Usuário removido com sucesso!"
       };
 
     default:
@@ -69,8 +71,8 @@ export const Creators = {
     payload: { error }
   }),
 
-  removeUserRequest: id => ({
-    type: Types.REMOVE_REQUEST,
+  removeUser: id => ({
+    type: Types.REMOVE_USER,
     payload: { id }
   })
 };
